@@ -5,17 +5,17 @@
     "name": "nodejs-mongodb-example",
     "annotations": {
       "openshift.io/display-name": "Node.js + MongoDB (Ephemeral)",
-      "description": "An example Node.js application with a MongoDB database. For more information about using this template, including OpenShift considerations, see https://github.com/openshift/nodejs-ex/blob/master/README.md.\n\nWARNING: Any data stored will be lost upon pod destruction. Only use this template for testing.",
+      "description": "An example Node.js application with a MongoDB database. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/nodejs-ex/blob/master/README.md.\n\nWARNING: Any data stored will be lost upon pod destruction. Only use this template for testing.",
       "tags": "quickstart,nodejs",
       "iconClass": "icon-nodejs",
       "openshift.io/long-description": "This template defines resources needed to develop a NodeJS application, including a build configuration, application deployment configuration, and database deployment configuration.  The database is stored in non-persistent storage, so this configuration should be used for experimental purposes only.",
       "openshift.io/provider-display-name": "Red Hat, Inc.",
-      "openshift.io/documentation-url": "https://github.com/openshift/nodejs-ex",
+      "openshift.io/documentation-url": "https://github.com/sclorg/nodejs-ex",
       "openshift.io/support-url": "https://access.redhat.com",
       "template.openshift.io/bindable": "false"
     }
   },
-  "message": "The following service(s) have been created in your project: ${NAME}, ${DATABASE_SERVICE_NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/openshift/nodejs-ex/blob/master/README.md.",
+  "message": "The following service(s) have been created in your project: ${NAME}, ${DATABASE_SERVICE_NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/sclorg/nodejs-ex/blob/master/README.md.",
   "labels": {
       "template": "nodejs-mongodb-example",
       "app": "nodejs-mongodb-example"
@@ -105,7 +105,7 @@
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "${NAMESPACE}",
-              "name": "nodejs:6"
+              "name": "nodejs:${NODEJS_VERSION}"
             },
             "env": [
               {
@@ -240,7 +240,7 @@
                   "timeoutSeconds": 3,
                   "initialDelaySeconds": 3,
                   "httpGet": {
-                    "path": "/pagecount",
+                    "path": "/",
                     "port": 8080
                   }
                 },
@@ -248,7 +248,7 @@
                   "timeoutSeconds": 3,
                   "initialDelaySeconds": 30,
                   "httpGet": {
-                    "path": "/pagecount",
+                    "path": "/",
                     "port": 8080
                   }
                 },
@@ -310,7 +310,7 @@
               "from": {
                 "kind": "ImageStreamTag",
                 "namespace": "${NAMESPACE}",
-                "name": "mongodb:3.2"
+                "name": "mongodb:${MONGODB_VERSION}"
               }
             }
           },
@@ -433,6 +433,20 @@
       "value": "openshift"
     },
     {
+      "name": "NODEJS_VERSION",
+      "displayName": "Version of NodeJS Image",
+      "description": "Version of NodeJS image to be used (6, 8, or latest).",
+      "value": "8",
+      "required": true
+    },
+    {
+      "name": "MONGODB_VERSION",
+      "displayName": "Version of MongoDB Image",
+      "description": "Version of MongoDB image to be used (3.6 or latest).",
+      "value": "3.6",
+      "required": true
+    },
+    {
       "name": "MEMORY_LIMIT",
       "displayName": "Memory Limit",
       "description": "Maximum amount of memory the Node.js container can use.",
@@ -451,7 +465,7 @@
       "displayName": "Git Repository URL",
       "description": "The URL of the repository with your application source code.",
       "required": true,
-      "value": "https://github.com/openshift/nodejs-ex.git"
+      "value": "https://github.com/sclorg/nodejs-ex.git"
     },
     {
       "name": "SOURCE_REPOSITORY_REF",
