@@ -42,7 +42,7 @@ app.post('/vlinktest', function (req, res) {
     let num = req.body.slice(0,4);
     let foo = ''
     let st = num.map(x => {foo += ' 0x' + x.toString(16)}).join(' ');
-    dp('POST IP addr:' + req.ip + ' data:' + foo);
+    dp('POST IP addr:' + req.ip + ' body length:' + req.body.length + ' data:' + foo);
     res.send('ACK');
 });
 
