@@ -12,7 +12,7 @@ dp.enabled = true;
 Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
-// app.use(morgan('combined'))
+app.use(morgan('combined'));
 // app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.raw());
 
@@ -46,6 +46,7 @@ app.post('/vlinktest', function (req, res) {
       num.map(x => {foo += ' 0x' + x.toString(16)}).join(' ');
     }
     dp('POST IP addr:' + req.ip + ' body length:' + req.body.length + ' data:' + foo);
+    dp('POST IP header: ' + JSON.stringify(req.headers, undefined, 2));
     res.send('ACK');
 });
 
