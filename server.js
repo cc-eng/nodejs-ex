@@ -1,12 +1,20 @@
 //  OpenShift sample Node application
 var express = require('express'),
     app     = express(),
-    morgan  = require('morgan');
+    morgan  = require('morgan'),
+    bodyParser = require('body-parser');
+
+let dg = require('debug')('node-ex:get');    
+let dp = require('debug')('node-ex:post');    
+dg.enabled = true;
+dp.enabled = true;
     
 Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+// app.use(morgan('combined'))
+// app.use(bodyParser.urlencoded({ extended : true }));
+app.use(bodyParser.raw());
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
@@ -26,11 +34,15 @@ app.get('/pagecount', function (req, res) {
 });
 
 app.get('/vlinktest', function (req, res) {
-    res.send('VLINK GET');
+    dg('VLINK GET');
+    res.send('ACK');
 });
 
 app.post('/vlinktest', function (req, res) {
-    console.log('POST IP addr:\n' + req.ip);
+    let num = req.body.slice(0,4);
+    let foo = ''
+    let st = num.map(x => {foo += ' 0x' + x.toString(16)}).join(' ');
+    dp('POST IP addr:' + req.ip + ' data:' + foo);
     res.send('ACK');
 });
 
@@ -39,10 +51,6 @@ app.post('/vlinktest', function (req, res) {
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something bad happened!');
-});
-
-initDb(function(err){
-  console.log('Error connecting to Mongo. Message:\n'+err);
 });
 
 app.listen(port, ip);
